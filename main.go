@@ -62,7 +62,17 @@ func main() {
 		// 待办事项
 		// 添加
 		v1Group.POST("/todo", func(c *gin.Context) {
-
+			// 前端页面填写待办事项，点击提交，发请求到这里
+			// 1. 从请求中把数据拿出来
+			var todo Todo
+			c.BindJSON(&todo)
+			// 2. 存入数据库,返回响应
+			err = DB.Create(&todo).Error
+			if err != nil {
+				c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+			} else {
+				c.JSON(http.StatusOK, todo)
+			}
 		})
 		// 查看所有待办事项
 		v1Group.GET("/todo", func(c *gin.Context) {
