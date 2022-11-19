@@ -1,0 +1,2 @@
+go mod tidy 检查安装依赖
+ctrl + alt +I 代码格式化
