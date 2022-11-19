@@ -1,2 +1,24 @@
 go mod tidy 检查安装依赖
 ctrl + alt +I 代码格式化
+
+
+git
+git clone git@github.com:XinyanZhang027/Go_TodoList.git
+cd Go_TodoList
+git add . 
+
+
+git commit - m 'day1' 提交评论
+git push 上传到github
+
+
+git查看本地用户名和邮箱地址：
+$ git config user.name
+$ git config user.email
+
+修改用户名和邮箱地址：
+$ git config --global user.name "username"
+$ git config --global user.email "email"
+
+github试用ssh连接以及生成修改添加密钥：
+https://www.cnblogs.com/zolich/p/12906838.html
