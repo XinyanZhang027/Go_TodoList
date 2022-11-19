@@ -13,9 +13,9 @@ var (
 )
 
 type Todo struct {
-	ID     int    "json:'id'"
-	Title  string "json:'title'"
-	Status bool   "json:'status'"
+	ID     int    "json: 'id'"
+	Title  string "json: 'title'"
+	Status bool   "json: 'status'"
 }
 
 /*
@@ -76,7 +76,14 @@ func main() {
 		})
 		// 查看所有待办事项
 		v1Group.GET("/todo", func(c *gin.Context) {
-
+			// 查询todo表里的所有数据
+			var todoList []Todo
+			if err = DB.Find(&todoList).Error; err != nil {
+				c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+			} else {
+				c.JSON(http.StatusOK, todoList)
+				//fmt.Println(todoList[0].Title)
+			}
 		})
 		// 查看某一个代办事项
 		v1Group.GET("/todo/:id", func(c *gin.Context) {
@@ -84,10 +91,30 @@ func main() {
 		})
 		// 修改某一个待办事项
 		v1Group.PUT("/todo/:id", func(c *gin.Context) {
+			id, ok := c.Params.Get("id")
+			if !ok {
+				c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+				return
+			}
+			var todo Todo
+			if err = DB.Where("id=?", id).First(&todo).Error; err != nil {
+				c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+				return
+			}
 
 		})
 		// 删除某一个待办事项
 		v1Group.DELETE("/todo/:id", func(c *gin.Context) {
+			id, ok := c.Params.Get("id")
+			if !ok {
+				c.JSON(http.StatusOK, gin.H{"error": "无效的id"})
+				return
+			}
+			if err = DB.Where("id=?", id).Delete(Todo{}).Error; err != nil {
+				c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+			} else {
+				c.JSON(http.StatusOK, gin.H{id: "deleted"})
+			}
 
 		})
 	}
